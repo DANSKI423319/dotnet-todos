@@ -11,6 +11,4 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUi(); // UseSwaggerUI Protected by if (env.IsDevelopment())
 }
 
-app.MapGet("/", () => "Hello World!");
-
 app.Run();
