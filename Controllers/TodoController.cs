@@ -1,15 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace DotNetTodos.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TodoController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TodoController : ControllerBase
+    [HttpGet]
+    public IActionResult GetTodos()
     {
-        [HttpGet]
-        public IActionResult GetTodos()
-        {
-            return Ok("Hello World");
-        }
+        return Ok("Hello World");
     }
 }
