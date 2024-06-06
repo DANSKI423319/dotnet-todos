@@ -1,8 +1,8 @@
-using DotnetTodos.Services;
-using DotnetTodos.Models;
+using Core.Entities;
+using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DotnetTodos.Controllers;
+namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

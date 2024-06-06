@@ -1,6 +1,7 @@
-using DotnetTodos.Models;
 
-namespace DotnetTodos.Services;
+using Core.Entities;
+
+namespace Core.Services;
 
 public static class TodoService
 {

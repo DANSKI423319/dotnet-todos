@@ -1,7 +1,7 @@
-using DotnetTodos.Models;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace EFCoreExample;
+namespace Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {
