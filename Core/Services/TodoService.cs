@@ -20,7 +20,14 @@ public class TodoService
 
     public async Task<Todo?> GetAsync(int id)
     {
-        return await _dbContext.Todos.FindAsync(id);
+        Todo? todo = await _dbContext.Todos.FindAsync(id);
+
+        if (todo == null || todo.DeletedAt != null)
+        {
+            return null;
+        }
+
+        return todo;
     }
 
     public async Task AddAsync(Todo todo)
