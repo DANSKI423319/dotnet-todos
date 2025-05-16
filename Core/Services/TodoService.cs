@@ -37,9 +37,9 @@ public class TodoService
             return false;
         }
 
-        existingTodo.Title = todo.Title;
-        existingTodo.Description = todo.Description;
-        existingTodo.IsCompleted = todo.IsCompleted;
+        existingTodo.Task = todo.Task;
+        existingTodo.CompletedAt = todo.CompletedAt;
+        existingTodo.UpdatedAt = DateTime.UtcNow;
 
         await _dbContext.SaveChangesAsync();
         return true;
@@ -53,7 +53,7 @@ public class TodoService
             return false;
         }
 
-        _dbContext.Todos.Remove(todo);
+        todo.DeletedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
         return true;
     }
