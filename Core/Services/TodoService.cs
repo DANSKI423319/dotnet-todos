@@ -1,10 +1,11 @@
 using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services;
 
-public class TodoService
+public class TodoService : IGenericRepository<Todo>
 {
     private readonly AppDbContext _dbContext;
 
