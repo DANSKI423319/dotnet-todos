@@ -1,6 +1,6 @@
 # Dotnet - Todo API
 
-This repository contains an example dockerized .NET API capturing CRUD functionality.
+This repository contains an example .NET API capturing CRUD functionality.
 
 ## Features
 - [X] Create new todo items
