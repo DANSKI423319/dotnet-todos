@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     ));
 
 // Register services that user database context
-builder.Services.AddScoped<TodoService>();
+builder.Services.AddScoped<TodoRepository>();
 
 var app = builder.Build();
 

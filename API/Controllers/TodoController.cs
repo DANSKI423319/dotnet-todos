@@ -1,5 +1,5 @@
 using Core.Entities;
-using Core.Services;
+using Core.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -8,23 +8,23 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class TodoController : ControllerBase
 {
-    private readonly TodoService _todoService;
+    private readonly TodoRepository _todoRepository;
 
-    public TodoController(TodoService todoService)
+    public TodoController(TodoRepository todoRepository)
     {
-        _todoService = todoService;
+        _todoRepository = todoRepository;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<Todo>>> GetAll()
     {
-        return await _todoService.GetAllAsync();
+        return await _todoRepository.GetAllAsync();
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Todo>> Get(int id)
     {
-        var todo = await _todoService.GetAsync(id);
+        var todo = await _todoRepository.GetAsync(id);
 
         if (todo == null)
         {
@@ -37,7 +37,7 @@ public class TodoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(Todo todo)
     {
-        await _todoService.AddAsync(todo);
+        await _todoRepository.AddAsync(todo);
 
         return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
     }
@@ -50,7 +50,7 @@ public class TodoController : ControllerBase
             return BadRequest();
         }
 
-        var success = await _todoService.UpdateAsync(todo);
+        var success = await _todoRepository.UpdateAsync(todo);
         if (!success)
         {
             return NotFound();
@@ -62,7 +62,7 @@ public class TodoController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _todoService.DeleteAsync(id);
+        var success = await _todoRepository.DeleteAsync(id);
         if (!success)
         {
             return NotFound();

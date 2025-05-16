@@ -3,13 +3,13 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Services;
+namespace Core.Repositories;
 
-public class TodoService : IGenericRepository<Todo>
+public class TodoRepository : IGenericRepository<Todo>
 {
     private readonly AppDbContext _dbContext;
 
-    public TodoService(AppDbContext dbContext)
+    public TodoRepository(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
