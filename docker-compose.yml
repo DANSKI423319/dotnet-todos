@@ -1,19 +1,27 @@
 services:
-  mysql:
+  dotnet-mysql:
     image: mysql:8.0
+    working_dir: /application
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: dotnet_todos
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_DATABASE: dotnettodos
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - mysql_data:/var/lib/mysql
+    networks:
+      - todos
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-ppassword"]
+      interval: 2s
       retries: 3
       timeout: 5s
 
+networks:
+  todos:
+    driver: bridge
+
 volumes:
-  mysql_data:
+  mysql-data:
