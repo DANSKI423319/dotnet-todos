@@ -8,21 +8,23 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class TodoController : ControllerBase
 {
-    public TodoController()
+    private readonly TodoService _todoService;
+
+    public TodoController(TodoService todoService)
     {
-        // 
+        _todoService = todoService;
     }
 
     [HttpGet]
-    public ActionResult<List<Todo>> GetAll()
+    public async Task<ActionResult<List<Todo>>> GetAll()
     {
-        return TodoService.GetAll();
+        return await _todoService.GetAllAsync();
     }
 
     [HttpGet("{id}")]
-    public ActionResult<Todo> Get(int id)
+    public async Task<ActionResult<Todo>> Get(int id)
     {
-        var todo = TodoService.Get(id);
+        var todo = await _todoService.GetAsync(id);
 
         if (todo == null)
         {
@@ -33,43 +35,38 @@ public class TodoController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(Todo todo)
+    public async Task<IActionResult> Create(Todo todo)
     {
-        TodoService.Add(todo);
+        await _todoService.AddAsync(todo);
 
         return CreatedAtAction(nameof(Get), new { id = todo.Id }, todo);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, Todo todo)
+    public async Task<IActionResult> Update(int id, Todo todo)
     {
         if (id != todo.Id)
         {
             return BadRequest();
         }
 
-        var existingTodo = TodoService.Get(id);
-        if (existingTodo is null)
+        var success = await _todoService.UpdateAsync(todo);
+        if (!success)
         {
             return NotFound();
         }
-
-        TodoService.Update(todo);
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var todo = TodoService.Get(id);
-
-        if (todo is null)
+        var success = await _todoService.DeleteAsync(id);
+        if (!success)
         {
             return NotFound();
         }
-
-        TodoService.Delete(id);
 
         return NoContent();
     }

@@ -1,46 +1,60 @@
-
 using Core.Entities;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core.Services;
 
-public static class TodoService
+public class TodoService
 {
-    static List<Todo> Todos { get; }
-    static int nextId = 3;
-    static TodoService()
+    private readonly AppDbContext _dbContext;
+
+    public TodoService(AppDbContext dbContext)
     {
-        Todos = new List<Todo>
+        _dbContext = dbContext;
+    }
+
+    public async Task<List<Todo>> GetAllAsync()
+    {
+        return await _dbContext.Todos.ToListAsync();
+    }
+
+    public async Task<Todo?> GetAsync(int id)
+    {
+        return await _dbContext.Todos.FindAsync(id);
+    }
+
+    public async Task AddAsync(Todo todo)
+    {
+        await _dbContext.Todos.AddAsync(todo);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<bool> UpdateAsync(Todo todo)
+    {
+        var existingTodo = await _dbContext.Todos.FindAsync(todo.Id);
+        if (existingTodo == null)
         {
-            new Todo { Id = 1, Title = "Create Repository", IsCompleted = false },
-            new Todo { Id = 2, Title = "Push to Repository", Description = "Push the code to the repository", IsCompleted = false }
-        };
+            return false;
+        }
+
+        existingTodo.Title = todo.Title;
+        existingTodo.Description = todo.Description;
+        existingTodo.IsCompleted = todo.IsCompleted;
+
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 
-    public static List<Todo> GetAll() => Todos;
-
-    public static Todo? Get(int id) => Todos.FirstOrDefault(p => p.Id == id);
-
-    public static void Add(Todo Todo)
+    public async Task<bool> DeleteAsync(int id)
     {
-        Todo.Id = nextId++;
-        Todos.Add(Todo);
-    }
+        var todo = await _dbContext.Todos.FindAsync(id);
+        if (todo == null)
+        {
+            return false;
+        }
 
-    public static void Delete(int id)
-    {
-        var Todo = Get(id);
-        if (Todo is null)
-            return;
-
-        Todos.Remove(Todo);
-    }
-
-    public static void Update(Todo Todo)
-    {
-        var index = Todos.FindIndex(p => p.Id == Todo.Id);
-        if (index == -1)
-            return;
-
-        Todos[index] = Todo;
+        _dbContext.Todos.Remove(todo);
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 }
